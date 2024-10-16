@@ -1,64 +1,25 @@
 <script setup>
-import { hexToHSB, hexToOklch } from '../utils.js'
+import { hexToOklch, oklchToHex } from "../utils.js";
 
-const props = defineProps(['hexColor', 'name'])
+const props = defineProps(["color", "name"]);
 
 function getColorStyle() {
-  return {
-    'width': '128px',
-    'height': '128px',
-    'background-color': getBaseColor()
-  }
-}
-
-function isHexColor(color) {
-  if (color) {
-    if (color.length === 7) {
-      return true
-    }
-    return false
-  } else {
-    return false
-  }
-}
-
-function getBaseColor() {
-  return isHexColor(props.hexColor) ? props.hexColor : '#FFFFFF'
-}
-
-function getHSB() {
-  return hexToHSB(getBaseColor())
-}
-
-function getOKLCH() {
-  const oklch = hexToOklch(getBaseColor())
-  if (oklch.h) {
-    return {
-      l: Math.round(oklch.l*1000)/1000,
-      c: Math.round(oklch.c*1000)/1000,
-      h: Math.round(oklch.h),
-    }
-  } else {
-    return {
-      l: Math.round(oklch.l*1000)/1000,
-      c: Math.round(oklch.c*1000)/1000,
-      h: 0 
-    }
-  }
+	return {
+		width: "96px",
+		height: "96px",
+		"background-color": `oklch(${props.color.l} ${props.color.c} ${props.color.h} )`,
+	};
 }
 </script>
 
 <template>
   <div class='mb-8'>
-    <div class="text-xl mb-4">{{ props.name }}</div>
+    <div class="text-xl mb-1">{{ props.name }}</div>
+    <div class="mb-4">{{ oklchToHex(props.color) }}</div>
     <div class='rounded border mb-4' :style="getColorStyle()"></div>
-    <div class='mb-4'> Hex: {{ getBaseColor() }} </div>
-    <!-- <div class=''> H: {{ getHSB().h }} </div> -->
-    <!-- <div class=''> S: {{ getHSB().s }} </div> -->
-    <!-- <div class='mb-4'> B: {{ getHSB().b }} </div> -->
-    <div class=''> L: {{ getOKLCH().l }} </div>
-    <div class=''> C: {{ getOKLCH().c }} </div>
-    <div class=''> H: {{ getOKLCH().h }} </div>
+    <div class=''> L: {{ Math.round(color.l*100)/100 }} </div>
+    <div class=''> C: {{ Math.round(color.c*100)/100 }} </div>
+    <div class=''> H: {{ Math.round(color.h) }} </div>
   </div>
 </template>
 
