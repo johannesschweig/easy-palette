@@ -1,8 +1,6 @@
 import { converter, formatHex } from "culori";
 
 export function oklchToHex(oklch) {
-	// let hexConverter = converter('rgb')
-	// return hexConverter(oklch)
 	return formatHex(oklch);
 }
 // Function to convert HEX to OKLCH using culori

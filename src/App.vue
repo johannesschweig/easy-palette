@@ -1,63 +1,10 @@
 <script setup>
 import Color from "./components/Color.vue";
 import { ref } from "vue";
-import { generatePalette, BASE_LEVELS, hexToOklch } from "./utils.js";
+import { generatePalette, BASE_LEVELS, oklchToHex } from "./utils.js";
 
-const hexColor = defineModel({ default: "#FFFFFF" });
+const hexColor = defineModel({ default: "#" });
 const palette = ref([]);
-
-const uiPalette = [
-	"#ecf4ff",
-	"#dceaff",
-	"#c0d7ff",
-	"#9abbff",
-	"#7294ff",
-	"#516dff",
-	"#3243f9",
-	"#2430dc",
-	"#222eb1",
-	"#242f8b",
-	"#151951",
-].map((col) => hexToOklch(col));
-const uiPalette2 = [
-	"#f4faf3",
-	"#e5f5e3",
-	"#cbeac8",
-	"#a2d89d",
-	"#71bd6b",
-	"#53ae4c",
-	"#3b8435",
-	"#31682d",
-	"#2b5328",
-	"#234522",
-	"#0e250e",
-].map((col) => hexToOklch(col));
-const uiPalette3 = [
-	"#fef9ec",
-	"#faf0cb",
-	"#f5de92",
-	"#f0c759",
-	"#ecb233",
-	"#e5941b",
-	"#ca7015",
-	"#a85115",
-	"#873e17",
-	"#713416",
-	"#401908",
-].map((col) => hexToOklch(col));
-const uiPalette4 = [
-	"#ffeff3",
-	"#ffe0ea",
-	"#ffc6da",
-	"#ff97bb",
-	"#ff5d99",
-	"#ff247b",
-	"#ff006f",
-	"#d7005d",
-	"#b40057",
-	"#990251",
-	"#570027",
-].map((col) => hexToOklch(col));
 
 function isHexColor(color) {
 	if (color) {
@@ -70,14 +17,20 @@ function isHexColor(color) {
 	}
 }
 
-function clearInput() {
-	hexColor.value = "#FFFFFF";
-}
-
 function changeHexColor() {
 	if (isHexColor(hexColor.value)) {
 		palette.value = generatePalette(hexColor.value);
 	}
+}
+
+function getExportJSON() {
+  return BASE_LEVELS.reduce((acc, level, index) => {
+      acc[level] = {
+          value: oklchToHex(palette.value[index]),
+          type: "color"
+      };
+      return acc;
+  }, {});
 }
 </script>
 
@@ -86,24 +39,15 @@ function changeHexColor() {
   <div class='mb-8'>
     <span class='mr-2'>Color:</span>
     <input class='border border-slate-300 rounded px-2 py-1 text-lg mr-2' v-model='hexColor' @change='changeHexColor'></input>
-    <button class='border rounded bg-white px-4 py-2' @click='clearInput()'>Clear</button>
   </div>
-  <div class='grid grid-cols-12'>
-    <Color v-for='col, i in palette':color='col' :name='BASE_LEVELS[i]'/>
+  <div v-if='palette.length'>
+    <div class='grid grid-cols-11'>
+      <Color v-for='col, i in palette':color='col' :name='BASE_LEVELS[i]'/>
+    </div>
+    <div class='text-lg mb-2'>Tokens Studio Export</div>
+    <div>{{ getExportJSON() }}</div>
   </div>
-  <!-- <div class='grid grid-cols-12'>
-    <Color v-for='col, i in uiPalette':color='col' :name='BASE_LEVELS[i]'/>
-  </div>
-  <div class='grid grid-cols-12'>
-    <Color v-for='col, i in uiPalette2':color='col' :name='BASE_LEVELS[i]'/>
-  </div>
-  <div class='grid grid-cols-12'>
-    <Color v-for='col, i in uiPalette3':color='col' :name='BASE_LEVELS[i]'/>
-  </div>
-  <div class='grid grid-cols-12'>
-    <Color v-for='col, i in uiPalette4':color='col' :name='BASE_LEVELS[i]'/>
-  </div> -->
-  
+  <div v-else class='text-sm text-slate-500 italic'>Enter a color to generate a palette</div>
 </template>
 
 <style scoped>
