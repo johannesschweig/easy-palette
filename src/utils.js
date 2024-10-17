@@ -43,6 +43,10 @@ export const generatePalette = (hexColor) => {
 
 	// Calculate luminance to determine where the base color falls
 	const baseColor = hexToOklch(hexColor);
+	// there is no hue returned if the color is greyscale
+	if (!baseColor.h) {
+	  baseColor.h = 0
+	}
 
 	// Determine the base level based on luminance
 	const baseLevel = getBaseLevel(baseColor.l);

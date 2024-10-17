@@ -41,8 +41,8 @@ function getExportJSON() {
     <input class='border border-slate-300 rounded px-2 py-1 text-lg mr-2' v-model='hexColor' @change='changeHexColor'></input>
   </div>
   <div v-if='palette.length'>
-    <div class='grid grid-cols-11'>
-      <Color v-for='col, i in palette':color='col' :name='BASE_LEVELS[i]'/>
+    <div class='grid grid-cols-3 md:grid-cols-6 lg:grid-cols-11'>
+      <Color v-for='col, i in palette':color='col' :name='BASE_LEVELS[i]' :highlightColor='hexColor'/>
     </div>
     <div class='text-lg mb-2'>Tokens Studio Export</div>
     <div>{{ getExportJSON() }}</div>
