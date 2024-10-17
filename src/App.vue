@@ -1,9 +1,12 @@
 <script setup>
 import Color from "./components/Color.vue";
 import { ref } from "vue";
-import { generatePalette, BASE_LEVELS, oklchToHex } from "./utils.js";
+import { generatePalette, BASE_LEVELS, oklchToHex, hexToOklch } from "./utils.js";
 
-const hexColor = defineModel({ default: "#" });
+const hexColor = ref('#')
+const lum = ref()
+const chroma = ref()
+const hue = ref()
 const palette = ref([]);
 
 function isHexColor(color) {
@@ -18,11 +21,22 @@ function isHexColor(color) {
 }
 
 function changeHexColor() {
-	if (isHexColor(hexColor.value)) {
-		palette.value = generatePalette(hexColor.value);
+  if (isHexColor(hexColor.value)) {
+    const color = hexToOklch(hexColor.value)
+    lum.value = color.l
+    chroma.value = color.c
+    hue.value = color.h
+    palette.value = generatePalette(color);
 	}
 }
 
+function changeOKLCH() {
+  if (lum && chroma && hue) {
+    const color = {mode: 'oklch', l: lum.value, c: chroma.value, h: hue.value}
+    hexColor.value = oklchToHex(color)
+    palette.value = generatePalette(color);
+	}
+}
 function getExportJSON() {
   return BASE_LEVELS.reduce((acc, level, index) => {
       acc[level] = {
@@ -36,9 +50,41 @@ function getExportJSON() {
 
 <template>
   <div class='text-3xl mb-4'>Easy Palette Generator</div>  
-  <div class='mb-8'>
+  <div class='mb-4'>
     <span class='mr-2'>Color:</span>
-    <input class='border border-slate-300 rounded px-2 py-1 text-lg mr-2' v-model='hexColor' @change='changeHexColor'></input>
+    <input class='border border-slate-300 rounded px-2 py-1 text-lg mr-2 w-24' v-model='hexColor' @change='changeHexColor'></input>
+  </div>
+  <div class='mb-8'>
+    <span class='mr-2'>L:</span>
+    <input
+      type='number'
+      min='0'
+      max='1'
+      step='0.05'
+      class='border border-slate-300 rounded px-2 py-1 text-lg mr-6 w-24'
+      v-model='lum'
+      @change='changeOKLCH'>
+    </input>
+    <span class='mr-2'>C:</span>
+    <input
+      type='number'
+      min='0'
+      max='1'
+      step='0.05'
+      class='border border-slate-300 rounded px-2 py-1 text-lg mr-6 w-24'
+      v-model='chroma'
+      @change='changeOKLCH'>
+    </input>
+    <span class='mr-2'>H:</span>
+    <input
+      type='number'
+      min='0'
+      max='360'
+      step='5'
+      class='border border-slate-300 rounded px-2 py-1 text-lg mr-6 w-24'
+      v-model='hue'
+      @change='changeOKLCH'>
+    </input>
   </div>
   <div v-if='palette.length'>
     <div class='grid grid-cols-3 md:grid-cols-6 lg:grid-cols-11'>

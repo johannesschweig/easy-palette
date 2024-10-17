@@ -37,12 +37,10 @@ const getChromaModifier = (level, chroma) => {
 };
 
 // Function to generate Tailwind color palette
-export const generatePalette = (hexColor) => {
+export const generatePalette = (baseColor) => {
 	// const palette = {};
 	const palette = [];
 
-	// Calculate luminance to determine where the base color falls
-	const baseColor = hexToOklch(hexColor);
 	// there is no hue returned if the color is greyscale
 	if (!baseColor.h) {
 	  baseColor.h = 0
