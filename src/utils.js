@@ -1,12 +1,12 @@
 import { converter, formatHex } from "culori";
 
 export function oklchToHex(oklch) {
-	return formatHex(oklch);
+	return formatHex(oklch)
 }
 // Function to convert HEX to OKLCH using culori
 export function hexToOklch(hex) {
 	let oklch = converter("oklch");
-	return oklch(hex);
+	return oklch(hex)
 }
 
 export const BASE_LEVELS = [
@@ -21,12 +21,12 @@ export const C_LEVELS = [
 
 // get closest base level
 const getBaseLevel = (lum) => {
-	var distances = [];
+	var distances = []
 	for (let i = 0; i < BASE_LEVELS.length; i++) {
-		distances.push(Math.abs(lum - L_LEVELS[i]));
+		distances.push(Math.abs(lum - L_LEVELS[i]))
 	}
-	return BASE_LEVELS[distances.indexOf(Math.min(...distances))];
-};
+	return BASE_LEVELS[distances.indexOf(Math.min(...distances))]
+}
 
 // how muted or more vibrant is the color compared to
 const getChromaModifier = (level, chroma) => {
@@ -38,7 +38,6 @@ const getChromaModifier = (level, chroma) => {
 
 // Function to generate Tailwind color palette
 export const generatePalette = (baseColor) => {
-	// const palette = {};
 	const palette = [];
 
 	// there is no hue returned if the color is greyscale
@@ -51,7 +50,7 @@ export const generatePalette = (baseColor) => {
 	const chromaMod = getChromaModifier(baseLevel, baseColor.c);
 
 	for (let i = 0; i < BASE_LEVELS.length; i++) {
-		var value;
+		var value
 		if (BASE_LEVELS[i] === baseLevel) {
 			value = baseColor;
 		} else {
@@ -60,9 +59,9 @@ export const generatePalette = (baseColor) => {
 				l: L_LEVELS[i],
 				c: C_LEVELS.map((chroma) => chroma * chromaMod)[i],
 				h: baseColor.h,
-			};
+			}
 		}
-		palette.push(value);
+		palette.push(value)
 	}
-	return palette;
+	return palette
 };
