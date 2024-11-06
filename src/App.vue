@@ -1,7 +1,7 @@
 <script setup>
-import Color from "./components/Color.vue";
 import { ref } from "vue";
-import { generatePalette, BASE_LEVELS, oklchToHex, hexToOklch, getExportJSON, getColorNamesJoined } from "./utils.js";
+import { generatePalette, oklchToHex, hexToOklch } from "./utils.js";
+import Palette from './components/Palette.vue'
 
 const hexColor = ref('#')
 const lum = ref()
@@ -38,10 +38,7 @@ function changeOKLCH() {
 	}
 }
 
-function copyTokensStudioExport() {
-  const text = JSON.stringify(getExportJSON(palette.value)).slice(1, -1) + ','
-  navigator.clipboard.writeText(text)
-}
+
 
 // set a sample color
 function sampleColor() {
@@ -88,19 +85,10 @@ function sampleColor() {
       @change='changeOKLCH'>
     </input>
   </div>
-  <div v-if='palette.length'>
-    <div class='text-2xl mb-2'>{{ getColorNamesJoined(palette[5]) }}</div>
-    <div class='grid grid-cols-3 md:grid-cols-6 lg:grid-cols-11'>
-      <Color v-for='col, i in palette':color='col' :name='BASE_LEVELS[i]' :highlightColor='hexColor'/>
-    </div>
-    <div>
-      <span class='text-lg mr-2'>Tokens Studio Export</span>
-      <button class='px-2 py-1 border rounded border-slate-300 bg-white hover:bg-slate-100 active:bg-slate-300' @click="copyTokensStudioExport">Copy</button>
-    </div>
-  </div>
+  <Palette
+    v-if='palette.length'
+    :palette='palette'
+    :hexColor='hexColor'/>
   <div v-else class='text-sm text-slate-500 italic'>Enter a color to generate a palette</div>
+  <div class='text-xs text-slate-500 fixed bottom-4'>By <a class='underline' href='https://johannesschweig.de/'>Johannes Schweig</a> • <a class='underline' href='https://github.com/johannesschweig/easy-palette'>Github</a></div>
 </template>
-
-<style scoped>
-
-</style>

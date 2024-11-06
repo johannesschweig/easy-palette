@@ -82,7 +82,7 @@ export function getExportJSON(palette) {
 
 // remove color prefixes that dilute the color name
 function removeColorPrefix(color) {
-  return color.replace("dark", "").replace("medium", "").replace("light", "").replace("deep", "")
+  return color.replace("dark", "").replace("medium", "").replace("light", "").replace("deep", "").replace("gray", "grey")
 }
 
 // get top 3 color names for the palette
@@ -90,7 +90,7 @@ function getColorNames(color500) {
   const hexColor500 = oklchToHex(color500)
   var flattenedColors = Object.values(namer(hexColor500, { omit: ['ntc', 'pantone']})).flat()
   flattenedColors.sort((a, b) => a.distance - b.distance)
-  flattenedColors = flattenedColors.slice(0, 10).map(color => color.name).map(color => removeColorPrefix(color))
+  flattenedColors = flattenedColors.slice(0, 12).map(color => color.name).map(color => removeColorPrefix(color))
   return [...new Set(flattenedColors)].slice(0, 3)
 }
 
