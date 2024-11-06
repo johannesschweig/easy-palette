@@ -1,6 +1,9 @@
 <script setup>
 import { oklchToHex } from '../utils.js'
+import { useStore } from '@/store'
+
 const props = defineProps(["color", "name", "highlightColor"]);
+const store = useStore()
 
 function getColorStyle() {
 	return {
@@ -18,10 +21,12 @@ function getColorStyle() {
       <div class="text-xl mb-1">{{ props.name }}</div>
       <div class="mb-4">{{ oklchToHex(props.color) }}</div>
     </div>
-    <div class='rounded mb-4' :style="getColorStyle()"></div>
-    <div class=''> L: {{ Math.round(color.l*100)/100 }} </div>
-    <div class=''> C: {{ Math.round(color.c*100)/100 }} </div>
-    <div class=''> H: {{ Math.round(color.h) }} </div>
+    <div class='rounded' :style="getColorStyle()"></div>
+    <div v-if='store.showLch' class='mt-4'>
+      <div class=''> L: {{ Math.round(color.l*100)/100 }} </div>
+      <div class=''> C: {{ Math.round(color.c*1000)/1000 }} </div>
+      <div class=''> H: {{ Math.round(color.h) }} </div>
+    </div>
   </div>
 </template>
 

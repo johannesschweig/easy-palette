@@ -12,13 +12,13 @@ export function hexToOklch(hex) {
 
 export const BASE_LEVELS = [
 	50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950,
-];
+]
 export const L_LEVELS = [
 	0.97, 0.94, 0.89, 0.81, 0.73, 0.66, 0.58, 0.5, 0.43, 0.39, 0.26,
-];
+]
 export const C_LEVELS = [
 	0.02, 0.04, 0.07, 0.12, 0.16, 0.19, 0.2, 0.18, 0.15, 0.12, 0.08,
-];
+]
 
 // get closest base level
 const getBaseLevel = (lum) => {
@@ -38,7 +38,7 @@ const getChromaModifier = (level, chroma) => {
 };
 
 // Function to generate Tailwind color palette
-export const generatePalette = (baseColor) => {
+export const generatePalette = (baseColor, type) => {
 	const palette = [];
 
 	// there is no hue returned if the color is greyscale
@@ -48,11 +48,19 @@ export const generatePalette = (baseColor) => {
 
 	// Determine the base level based on luminance
 	const baseLevel = getBaseLevel(baseColor.l);
-	const chromaMod = getChromaModifier(baseLevel, baseColor.c);
+	// get modifier for chroma based on color
+	// if it is for grays use 0.125 (max. 0.025 chroma for a C_LEVEL of 0.2)
+	// if it is for neutrals use 0 as chroma
+	const chromaMod = 
+  	type === 'color' ?
+  	  getChromaModifier(baseLevel, baseColor.c) :
+      type === 'grey' ?
+        0.125 :
+        0
 
 	for (let i = 0; i < BASE_LEVELS.length; i++) {
 		var value
-		if (BASE_LEVELS[i] === baseLevel) {
+		if (BASE_LEVELS[i] === baseLevel && type === 'color') {
 			value = baseColor;
 		} else {
 			value = {
@@ -82,7 +90,7 @@ export function getExportJSON(palette) {
 
 // remove color prefixes that dilute the color name
 function removeColorPrefix(color) {
-  return color.replace("dark", "").replace("medium", "").replace("light", "").replace("deep", "").replace("gray", "grey")
+  return color.replace("dark", "").replace("medium", "").replace("light", "").replace("deep", "").replace("pale", "").replace("gray", "grey")
 }
 
 // get top 3 color names for the palette
