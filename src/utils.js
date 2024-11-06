@@ -1,4 +1,5 @@
 import { converter, formatHex } from "culori";
+import namer from 'color-namer'
 
 export function oklchToHex(oklch) {
 	return formatHex(oklch)
@@ -65,3 +66,35 @@ export const generatePalette = (baseColor) => {
 	}
 	return palette
 };
+
+// get json for export
+export function getExportJSON(palette) {
+  return {
+    [getColorNames(palette[5])[0]]: BASE_LEVELS.reduce((acc, level, index) => {
+      acc[level] = {
+        value: oklchToHex(palette[index]),
+        type: "color"
+      };
+      return acc;
+    }, {})
+  }
+}
+
+// remove color prefixes that dilute the color name
+function removeColorPrefix(color) {
+  return color.replace("dark", "").replace("medium", "").replace("light", "").replace("deep", "")
+}
+
+// get top 3 color names for the palette
+function getColorNames(color500) {
+  const hexColor500 = oklchToHex(color500)
+  var flattenedColors = Object.values(namer(hexColor500, { omit: ['ntc', 'pantone']})).flat()
+  flattenedColors.sort((a, b) => a.distance - b.distance)
+  flattenedColors = flattenedColors.slice(0, 10).map(color => color.name).map(color => removeColorPrefix(color))
+  return [...new Set(flattenedColors)].slice(0, 3)
+}
+
+// capitalize and join with comma
+export function getColorNamesJoined(color500) {
+  return getColorNames(color500).map(color => color.charAt(0).toUpperCase() + color.slice(1)).join(", ")
+}

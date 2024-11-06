@@ -1,8 +1,7 @@
 <script setup>
 import Color from "./components/Color.vue";
 import { ref } from "vue";
-import { generatePalette, BASE_LEVELS, oklchToHex, hexToOklch } from "./utils.js";
-import namer from 'color-namer'
+import { generatePalette, BASE_LEVELS, oklchToHex, hexToOklch, getExportJSON, getColorNamesJoined } from "./utils.js";
 
 const hexColor = ref('#')
 const lum = ref()
@@ -38,33 +37,12 @@ function changeOKLCH() {
     palette.value = generatePalette(color);
 	}
 }
-function getExportJSON() {
-  return {
-    [getColorNames()[0]]: BASE_LEVELS.reduce((acc, level, index) => {
-      acc[level] = {
-        value: oklchToHex(palette.value[index]),
-        type: "color"
-      };
-      return acc;
-    }, {})
-  }
-}
+
 function copyTokensStudioExport() {
-  const text = JSON.stringify(getExportJSON()).slice(1, -1) + ','
+  const text = JSON.stringify(getExportJSON(palette.value)).slice(1, -1) + ','
   navigator.clipboard.writeText(text)
 }
-// get color names for the palette
-function getColorNames() {
-  const hexColor500 = oklchToHex(palette.value[5])
-  var flattenedColors = Object.values(namer(hexColor500, { omit: ['ntc', 'pantone']})).flat()
-  flattenedColors.sort((a, b) => a.distance - b.distance)
-  // top 5, make them unique
-  return [...new Set(flattenedColors.slice(0, 5).map(color => color.name))]
-}
-function getColorNamesJoined() {
-  // capitalize and join with comma
-  return getColorNames().map(color => color.charAt(0).toUpperCase() + color.slice(1)).join(", ")
-}
+
 // set a sample color
 function sampleColor() {
   hexColor.value = '#df7711'
@@ -111,7 +89,7 @@ function sampleColor() {
     </input>
   </div>
   <div v-if='palette.length'>
-    <div class='text-2xl mb-2'>{{ getColorNamesJoined() }}</div>
+    <div class='text-2xl mb-2'>{{ getColorNamesJoined(palette[5]) }}</div>
     <div class='grid grid-cols-3 md:grid-cols-6 lg:grid-cols-11'>
       <Color v-for='col, i in palette':color='col' :name='BASE_LEVELS[i]' :highlightColor='hexColor'/>
     </div>
