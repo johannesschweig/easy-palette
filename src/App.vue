@@ -5,7 +5,7 @@ const store = useStore()
 </script>
 
 <template>
-  <div class='text-3xl mb-4'>Easy Palette Generator</div>  
+  <div class='text-3xl mb-4'>Easy Palette Generator</div>
   <div class='mb-2'>
     <span class='mr-2' @click='store.sampleColor()'>Color:</span>
     <input class='border border-slate-300 rounded px-2 py-1 text-lg mr-2 w-24' v-model='store.hexColor'></input>
