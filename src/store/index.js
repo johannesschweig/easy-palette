@@ -7,7 +7,7 @@ export const useStore = defineStore('store', () => {
   const lum = ref(0)
   const chroma = ref(0)
   const hue = ref(0)
-  const showLch = ref(false)
+  const showDetails = ref(false)
   
   const colorPalette = computed(() => {
     return isValidHexColor() ? generatePalette({ mode: 'oklch', l: lum.value, c: chroma.value, h: hue.value }, 'color') : []
@@ -52,7 +52,7 @@ export const useStore = defineStore('store', () => {
     lum,
     chroma,
     hue,
-    showLch,
+    showDetails,
     colorPalette,
     greyPalette,
     neutralPalette,

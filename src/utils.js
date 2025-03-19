@@ -1,4 +1,4 @@
-import { converter, formatHex } from "culori";
+import { wcagContrast, converter, formatHex } from "culori";
 import namer from 'color-namer'
 
 export function oklchToHex(oklch) {
@@ -105,4 +105,8 @@ function getColorNames(color500) {
 // capitalize and join with comma
 export function getColorNamesJoined(color500) {
   return getColorNames(color500).map(color => color.charAt(0).toUpperCase() + color.slice(1)).join(", ")
+}
+
+export function isReadableAgainstWhite(color) {
+	return wcagContrast(color, "#ffffff") >= 4.5
 }

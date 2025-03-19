@@ -40,8 +40,8 @@ const store = useStore()
     </input>
   </div>
   <div class='mb-8'>
-    <input type="checkbox" id="showLch" name="showLch" value="showLch" class='mr-2' v-model='store.showLch'>
-    <label for="showLch">Show LCH</label>
+    <input type="checkbox" id="showDetails" name="showDetails" value="showDetails" class='mr-2' v-model='store.showDetails'>
+    <label for="showDetails">Show details</label>
   </div>
   <Palette
     v-if='store.colorPalette.length'

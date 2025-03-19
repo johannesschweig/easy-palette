@@ -36,7 +36,7 @@ function getGreyName() {
         Copy JSON
       </button>
     </div>
-    <div class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-11">
+    <div class="flex gap-4 flex-wrap">
       <Color
         v-for="(col, i) in palette"
         :color="col"
