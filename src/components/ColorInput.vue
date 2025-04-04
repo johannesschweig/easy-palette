@@ -4,9 +4,9 @@
     <input class='border border-slate-300 rounded px-2 py-1 text-lg mr-2 w-24' v-model='store.hexColor'></input>
   </div>
   <div class='mb-2 flex gap-4'>
-    <InputSlider :max=1 :step=0.05 :model='"lum"' />
-    <InputSlider :max=1 :step=0.05 :model='"chroma"' />
-    <InputSlider :max=360 :step=10 :model='"hue"' />
+    <InputSlider :max=1 :step=0.02 :model='"lum"' />
+    <InputSlider :max=1 :step=0.02 :model='"chroma"' />
+    <InputSlider :max=360 :step=5 :model='"hue"' />
   </div>
   <div class='mb-8'>
     <input type="checkbox" id="showDetails" name="showDetails" value="showDetails" class='mr-2' v-model='store.showDetails'>
