@@ -1,48 +1,13 @@
 <script setup>
 import Palette from './components/Palette.vue'
+import ColorInput from './components/ColorInput.vue'
 import { useStore } from '@/store'
 const store = useStore()
 </script>
 
 <template>
   <div class='text-3xl mb-4'>Easy Palette Generator</div>
-  <div class='mb-2'>
-    <span class='mr-2' @click='store.sampleColor()'>Color:</span>
-    <input class='border border-slate-300 rounded px-2 py-1 text-lg mr-2 w-24' v-model='store.hexColor'></input>
-  </div>
-  <div class='mb-2'>
-    <span class='mr-2'>L:</span>
-    <input
-      type='number'
-      min='0'
-      max='1'
-      step='0.05'
-      class='border border-slate-300 rounded px-2 py-1 text-lg mr-6 w-24'
-      v-model='store.lum'>
-    </input>
-    <span class='mr-2'>C:</span>
-    <input
-      type='number'
-      min='0'
-      max='1'
-      step='0.05'
-      class='border border-slate-300 rounded px-2 py-1 text-lg mr-6 w-24'
-      v-model='store.chroma'>
-    </input>
-    <span class='mr-2'>H:</span>
-    <input
-      type='number'
-      min='0'
-      max='360'
-      step='10'
-      class='border border-slate-300 rounded px-2 py-1 text-lg mr-6 w-24'
-      v-model='store.hue'>
-    </input>
-  </div>
-  <div class='mb-8'>
-    <input type="checkbox" id="showDetails" name="showDetails" value="showDetails" class='mr-2' v-model='store.showDetails'>
-    <label for="showDetails">Show details</label>
-  </div>
+  <ColorInput />
   <Palette
     v-if='store.colorPalette.length'
     name='color'
