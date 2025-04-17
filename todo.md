@@ -1,7 +1,6 @@
 ## todo
 - changing number in input field should not retrigger drawing
     - maybe apply button or delay?
-- put 50, 100,... in the rectangle
 - compare different hex input color paletttes
 
 ## v0.1.0
@@ -10,6 +9,7 @@
 - max chroma 0.47 (reasonable 0.2-0.3)
 - deemphasize second and third color names and the ones in ()
 - de-emphasize greys and neutrals
+- put 50, 100,... in the rectangle
 
 ## dropped
 - make checkbox a switch
