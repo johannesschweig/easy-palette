@@ -43,7 +43,7 @@ export const generatePalette = (baseColor, type) => {
 
 	// there is no hue returned if the color is greyscale
 	if (!baseColor.h) {
-	  baseColor.h = 0
+		baseColor.h = 0
 	}
 
 	// Determine the base level based on luminance
@@ -51,12 +51,12 @@ export const generatePalette = (baseColor, type) => {
 	// get modifier for chroma based on color
 	// if it is for grays use 0.125 (max. 0.025 chroma for a C_LEVEL of 0.2)
 	// if it is for neutrals use 0 as chroma
-	const chromaMod = 
-  	type === 'color' ?
-  	  getChromaModifier(baseLevel, baseColor.c) :
-      type === 'grey' ?
-        0.125 :
-        0
+	const chromaMod =
+		type === 'color' ?
+			getChromaModifier(baseLevel, baseColor.c) :
+			type === 'grey' ?
+				0.125 :
+				0
 
 	for (let i = 0; i < BASE_LEVELS.length; i++) {
 		var value
@@ -77,36 +77,40 @@ export const generatePalette = (baseColor, type) => {
 
 // get json for export
 export function getExportJSON(palette) {
-  return {
-    [getColorNames(palette[5])[0]]: BASE_LEVELS.reduce((acc, level, index) => {
-      acc[level] = {
-        value: oklchToHex(palette[index]),
-        type: "color"
-      };
-      return acc;
-    }, {})
-  }
+	return {
+		[getColorNames(palette[5])[0]]: BASE_LEVELS.reduce((acc, level, index) => {
+			acc[level] = {
+				value: oklchToHex(palette[index]),
+				type: "color"
+			};
+			return acc;
+		}, {})
+	}
 }
 
 // remove color prefixes that dilute the color name
 function removeColorPrefix(color) {
-  return color.replace("dark", "").replace("medium", "").replace("light", "").replace("deep", "").replace("pale", "").replace("gray", "grey")
+	return color.replace("dark", "").replace("medium", "").replace("light", "").replace("deep", "").replace("pale", "").replace("gray", "grey")
 }
 
 // get top 3 color names for the palette
 function getColorNames(color500) {
-  const hexColor500 = oklchToHex(color500)
-  var flattenedColors = Object.values(namer(hexColor500, { omit: ['ntc', 'pantone']})).flat()
-  flattenedColors.sort((a, b) => a.distance - b.distance)
-  flattenedColors = flattenedColors.slice(0, 12).map(color => color.name).map(color => removeColorPrefix(color))
-  return [...new Set(flattenedColors)].slice(0, 3)
+	const hexColor500 = oklchToHex(color500)
+	var flattenedColors = Object.values(namer(hexColor500, { omit: ['ntc', 'pantone'] })).flat()
+	flattenedColors.sort((a, b) => a.distance - b.distance)
+	flattenedColors = flattenedColors.slice(0, 12).map(color => color.name).map(color => removeColorPrefix(color))
+	return [...new Set(flattenedColors)].slice(0, 3)
 }
 
 // capitalize and join with comma
 export function getColorNamesJoined(color500) {
-  return getColorNames(color500).map(color => color.charAt(0).toUpperCase() + color.slice(1)).join(", ")
+	return getColorNames(color500).map(color => color.charAt(0).toUpperCase() + color.slice(1)).join(", ")
 }
 
 export function isReadableAgainstWhite(color) {
 	return wcagContrast(color, "#ffffff") >= 4.5
+}
+
+export function isValidHexColor(color) {
+	return color && /^#[0-9A-F]{6}$/i.test(color)
 }

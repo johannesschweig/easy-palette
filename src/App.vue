@@ -2,7 +2,19 @@
 import Palette from './components/Palette.vue'
 import ColorInput from './components/ColorInput.vue'
 import { useStore } from '@/store'
+import { onMounted } from 'vue'
+import {isValidHexColor} from '@/utils.js'
 const store = useStore()
+
+onMounted(() => {
+  // Check for a 'color' parameter in the URL on store initialization
+  const url = new URL(window.location)
+  const initialColor = url.searchParams.get('color')
+  if (initialColor && isValidHexColor(`#${initialColor}`)) {
+    const store = useStore()
+    store.hexColor = `#${initialColor}`
+  }
+})
 </script>
 
 <template>
