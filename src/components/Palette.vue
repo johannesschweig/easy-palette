@@ -1,5 +1,5 @@
 <script setup>
-import { getExportJSON, getColorNamesJoined, BASE_LEVELS } from "../utils.js";
+import { getExportJSON, getColorNamesUpper, BASE_LEVELS } from "../utils.js";
 import Color from "./Color.vue";
 
 const props = defineProps(["palette", "hexColor", "name"]);
@@ -18,31 +18,28 @@ function copyTokensStudioExport() {
 
 function getGreyName() {
   return props.name === 'neutral' ?
-    'Pure greys (Neutral)' :
-    'Tinted greys (Grey)'
+    'Pure greys' :
+    'Tinted greys'
 }
 </script>
 
 <template>
   <div class="mb-8">
     <div>
-      <div class="text-2xl mb-2 inline-block">
-        {{ name === "color" ? getColorNamesJoined(palette[5]) : getGreyName(name) }}
+      <div class="mb-2 inline-block">
+        <div class="text-2xl ">{{ name === "color" ? getColorNamesUpper(palette[5])[0] : getGreyName(name) }}</div>
+        <div v-if='name === "color"' class="text-base mb-2 inline-block text-slate-700">
+          {{ getColorNamesUpper(palette[5]).slice(1).join(', ') }}
+        </div>
       </div>
       <button
         class="float-right px-2 py-1 border rounded border-slate-300 bg-white hover:bg-slate-100 active:bg-slate-300"
-        @click="copyTokensStudioExport"
-      >
+        @click="copyTokensStudioExport">
         Copy JSON
       </button>
     </div>
     <div class="flex gap-4 flex-wrap">
-      <Color
-        v-for="(col, i) in palette"
-        :color="col"
-        :name="BASE_LEVELS[i]"
-        :highlightColor="hexColor"
-      />
+      <Color v-for="(col, i) in palette" :color="col" :name="BASE_LEVELS[i]" :highlightColor="hexColor" />
     </div>
   </div>
 </template>

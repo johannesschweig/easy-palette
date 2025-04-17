@@ -5,7 +5,7 @@
   </div>
   <div class='mb-2 flex gap-4'>
     <InputSlider :max=1 :step=0.02 :model='"lum"' />
-    <InputSlider :max=1 :step=0.02 :model='"chroma"' />
+    <InputSlider :max=0.45 :step=0.02 :model='"chroma"' />
     <InputSlider :max=360 :step=5 :model='"hue"' />
   </div>
   <div class='mb-8'>

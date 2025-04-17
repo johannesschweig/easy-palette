@@ -103,8 +103,8 @@ function getColorNames(color500) {
 }
 
 // capitalize and join with comma
-export function getColorNamesJoined(color500) {
-	return getColorNames(color500).map(color => color.charAt(0).toUpperCase() + color.slice(1)).join(", ")
+export function getColorNamesUpper(color500) {
+	return getColorNames(color500).map(color => color.charAt(0).toUpperCase() + color.slice(1))
 }
 
 export function isReadableAgainstWhite(color) {
