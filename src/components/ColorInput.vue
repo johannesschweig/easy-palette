@@ -10,7 +10,7 @@
   </div>
   <div class='mb-8'>
     <input type="checkbox" id="showDetails" name="showDetails" value="showDetails" class='mr-2' v-model='store.showDetails'>
-    <label for="showDetails">Show details</label>
+    <label for="showDetails" class='select-none'>Show details</label>
   </div>
 </template>
 
