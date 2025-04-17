@@ -18,6 +18,10 @@ function getColorStyle() {
         border: props.name < 200 ? "1px solid #d8d8d8" : "none",
     };
 }
+
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text)
+}
 </script>
 
 <template>
@@ -27,7 +31,12 @@ function getColorStyle() {
         {{ props.name }}
         {{ isSelectedColor ? "⌖" : "" }}
       </div>
-      <div class="mb-4">{{ oklchToHex(props.color) }}</div>
+      <div class="mb-4 cursor-pointer group hover:font-bold" @click="copyToClipboard(oklchToHex(props.color))" >
+        {{ oklchToHex(props.color) }}
+        <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+          ⧉
+        </span>
+      </div>
     </div>
     <div class='rounded' :style="getColorStyle()"></div>
     <div v-if='store.showDetails' class='mt-4 text-sm'>
