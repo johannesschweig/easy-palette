@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from "vue"
-import { generatePalette, hexToOklch, oklchToHex, isValidHexColor } from '../utils.js'
+import { generatePalette, hexToOklch, oklchToHex, isValidHexColor, updateFaviconFromURL } from '../utils.js'
 
 export const useStore = defineStore('store', () => {
   const hexColor = ref('#')
@@ -35,6 +35,8 @@ export const useStore = defineStore('store', () => {
       const url = new URL(window.location)
       url.searchParams.set('color', newHex.slice(1))
       window.history.pushState({}, '', url)
+      // update favicon
+      updateFaviconFromURL()
     }
   })
 
