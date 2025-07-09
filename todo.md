@@ -5,6 +5,7 @@
 ## v0.2.0
 - remove grey display
 - dynamic favicon from color
+- compare colors
 ## v0.1.0
 - put title of main color in html title to differentiate tabs and in the url to easyily copy and share a tab
 - click to copy hex code

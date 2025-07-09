@@ -23,18 +23,15 @@ onMounted(() => {
   <Palette
     v-if='store.colorPalette.length'
     name='color'
-    :palette='store.colorPalette'
-    :hexColor='store.hexColor'/>
+    :palette='store.colorPalette' />
   <Palette
     v-if='store.greyPalette.length'
     name='grey'
-    :palette='store.greyPalette'
-    :hexColor='store.hexColor'/>
+    :palette='store.greyPalette' />
   <Palette
     v-if='store.neutralPalette.length'
     name='neutral'
-    :palette='store.neutralPalette'
-    :hexColor='store.hexColor'/>
+    :palette='store.neutralPalette' />
   <div v-else class='text-sm text-slate-500 italic mb-12'>Enter a color to generate a palette</div>
   <div class='text-xs text-slate-500'>By <a class='underline' href='https://johannesschweig.de/'>Johannes Schweig</a> • <a class='underline' href='https://github.com/johannesschweig/easy-palette'>Github</a></div>
 </template>

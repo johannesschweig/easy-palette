@@ -1,9 +1,11 @@
 <script setup>
 import { getExportJSON, getColorNamesUpper, BASE_LEVELS } from "../utils.js";
 import Color from "./Color.vue";
-import { ref, computed } from "vue";
+import { computed } from "vue";
+import { useStore } from "@/store/index.js";
 
-const props = defineProps(["palette", "hexColor", "name"]);
+const props = defineProps(["palette", "name"]);
+const store = useStore()
 
 function copyTokensStudioExport() {
   var exportedPalette = getExportJSON(props.palette)
@@ -38,12 +40,12 @@ const greyName = computed(() => {
       </button>
     </div>
     <div class="flex gap-4 flex-wrap">
-      <Color v-for="(col, i) in palette" :color="col" :name="BASE_LEVELS[i]" :highlightColor="hexColor" />
+      <Color v-for="(col, i) in palette" :color="col" :name="BASE_LEVELS[i]" :highlightColor="store.hexColor"
+        :isClosestCompare="i === store.compareIndex" :compareColor="store.compareColor" />
     </div>
   </div>
   <div v-else class="mb-4">
-    <button
-      class="px-2 py-1 border rounded border-slate-300 bg-white hover:bg-slate-100 active:bg-slate-300"
+    <button class="px-2 py-1 border rounded border-slate-300 bg-white hover:bg-slate-100 active:bg-slate-300"
       @click="copyTokensStudioExport">
       Copy {{ greyName }} JSON
     </button>

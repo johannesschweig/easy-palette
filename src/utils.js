@@ -37,43 +37,55 @@ const getChromaModifier = (level, chroma) => {
 	return chromaMod;
 };
 
-// Function to generate Tailwind color palette
+// Function to generate Tailwind color palette (no compareColor logic)
 export const generatePalette = (baseColor, type) => {
-	const palette = [];
+    const palette = [];
 
-	// there is no hue returned if the color is greyscale
-	if (!baseColor.h) {
-		baseColor.h = 0
-	}
+    // there is no hue returned if the color is greyscale
+    if (!baseColor.h) {
+        baseColor.h = 0
+    }
 
-	// Determine the base level based on luminance
-	const baseLevel = getBaseLevel(baseColor.l);
-	// get modifier for chroma based on color
-	// if it is for grays use 0.125 (max. 0.025 chroma for a C_LEVEL of 0.2)
-	// if it is for neutrals use 0 as chroma
-	const chromaMod =
-		type === 'color' ?
-			getChromaModifier(baseLevel, baseColor.c) :
-			type === 'grey' ?
-				0.125 :
-				0
+    // Determine the base level based on luminance
+    const baseLevel = getBaseLevel(baseColor.l);
+    const chromaMod =
+        type === 'color' ?
+            getChromaModifier(baseLevel, baseColor.c) :
+            type === 'grey' ?
+                0.125 :
+                0
 
-	for (let i = 0; i < BASE_LEVELS.length; i++) {
-		var value
-		if (BASE_LEVELS[i] === baseLevel && type === 'color') {
-			value = baseColor;
-		} else {
-			value = {
-				mode: "oklch",
-				l: L_LEVELS[i],
-				c: C_LEVELS.map((chroma) => chroma * chromaMod)[i],
-				h: baseColor.h,
-			}
-		}
-		palette.push(value)
-	}
-	return palette
+    for (let i = 0; i < BASE_LEVELS.length; i++) {
+        let value;
+        if (BASE_LEVELS[i] === baseLevel && type === 'color') {
+            value = baseColor;
+        } else {
+            value = {
+                mode: "oklch",
+                l: L_LEVELS[i],
+                c: C_LEVELS.map((chroma) => chroma * chromaMod)[i],
+                h: baseColor.h,
+            }
+        }
+        palette.push(value)
+    }
+
+    return palette;
 };
+
+// New function: find index in palette where compareColor is closest in luminance
+export function findClosestLuminanceIndex(compareColor, palette) {
+    let minDist = Infinity;
+    let closestIdx = 0;
+    for (let i = 0; i < palette.length; i++) {
+        const dist = Math.abs(compareColor.l - palette[i].l);
+        if (dist < minDist) {
+            minDist = dist;
+            closestIdx = i;
+        }
+    }
+    return closestIdx;
+}
 
 // get json for export
 export function getExportJSON(palette) {
@@ -154,4 +166,8 @@ export function updateFaviconFromURL() {
 
 	// Add new
 	document.head.appendChild(link);
+}
+
+export function constructOklchColor(lum, chroma, hue) {
+	return { mode: 'oklch', l: lum, c: chroma, h: hue }
 }

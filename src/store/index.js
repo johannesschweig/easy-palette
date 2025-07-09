@@ -1,26 +1,33 @@
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from "vue"
-import { generatePalette, hexToOklch, oklchToHex, isValidHexColor, updateFaviconFromURL } from '../utils.js'
+import { generatePalette, hexToOklch, oklchToHex, isValidHexColor, updateFaviconFromURL, constructOklchColor, findClosestLuminanceIndex } from '../utils.js'
 
 export const useStore = defineStore('store', () => {
   const hexColor = ref('#')
   const lum = ref(0)
   const chroma = ref(0)
   const hue = ref(0)
+
+  const compareColor = ref('#')
+  const compareLum = ref(0)
+  const compareChroma = ref(0)
+  const compareHue = ref(0)
+  const compareIndex = ref(-1)
+
   const showDetails = ref(false)
 
   
 
   const colorPalette = computed(() => {
-    return isValidHexColor(hexColor.value) ? generatePalette({ mode: 'oklch', l: lum.value, c: chroma.value, h: hue.value }, 'color') : []
+    return isValidHexColor(hexColor.value) ? generatePalette(constructOklchColor(lum.value, chroma.value, hue.value), 'color') : []
   })
 
   const greyPalette = computed(() => {
-    return isValidHexColor(hexColor.value) ? generatePalette({ mode: 'oklch', l: lum.value, c: 0.025, h: hue.value }, 'grey') : []
+    return isValidHexColor(hexColor.value) ? generatePalette(constructOklchColor(lum.value, 0.025, hue.value), 'grey') : []
   })
 
   const neutralPalette = computed(() => {
-    return isValidHexColor(hexColor.value) ? generatePalette({ mode: 'oklch', l: lum.value, c: 0, h: hue.value }, 'neutral') : []
+    return isValidHexColor(hexColor.value) ? generatePalette(constructOklchColor(lum.value, 0, hue.value), 'neutral') : []
   })
 
   watch(hexColor, (newHex) => {
@@ -48,7 +55,21 @@ export const useStore = defineStore('store', () => {
     }
   })
 
-  
+  watch(compareColor, (newHex) => {
+    if (isValidHexColor(compareColor.value)) {
+      const color = hexToOklch(newHex)
+      compareLum.value = color.l
+      compareChroma.value = color.c
+      compareHue.value = color.h
+
+      if (isValidHexColor(compareColor.value)) {
+        compareIndex.value = findClosestLuminanceIndex(color, colorPalette.value)
+      }
+    } else {
+      compareIndex.value = -1
+    }
+  })
+
 
   // set a sample color
   function sampleColor() {
@@ -60,6 +81,11 @@ export const useStore = defineStore('store', () => {
     lum,
     chroma,
     hue,
+    compareColor,
+    compareLum,
+    compareChroma,
+    compareHue,
+    compareIndex,
     showDetails,
     colorPalette,
     greyPalette,
